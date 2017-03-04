@@ -11,18 +11,31 @@ Note: I set the default on the max number of moves to be 100.
 File structures in the zipped files and key functions used
 I adopted an object-oriented programming framework which a puzzle is denoted as a node and the search algorithms resemble a queue structure. 
 
-File	Functions	Functions Descriptions
-EightP.h/EightP_mtd.cpp
--To create the puzzle/combination object	void puzzle::set_tot_cost()	Sum of incurred costs (each expansions results in +1 incurred cost) and the heuristic of number of wrong tiles
-	void puzzle::set_factoradic()	More for BFS. Once we’re able to find the factodoric index, we could denote 1 in the array of length 362880 if the combi has been explored.
-	void puzzle::moveleft(), movedown(), moveup(), moveright()	Moving the empty tile around while establishing rules on whether it’s legal for the move to be made.
-Queue.h/Queue.cpp
--To create the queue object for the search algorithm	void queue::add(int* a,int t,int ic,int wt,int tc,int vm, char m,vector<char> moves)	Queuing the combinations as puzzles. This is the process: Once I dequeue a node, I will queue the childs after the ‘last’ node before the expansion
-	valid_addition(int* a,int t,int ic,int wt,int tc,int vm, char m)	Test if it’s a valid addition. If valid, then I will add on to the queue. This accounts for whether it’s legal to move l,d,u or r. Also, if a node has already been added to the queue (known by factodoric index in array), I will not add on to the queue. 
-	add_indicator(int* a,int t,int ic,int wt,int tc,int vm, char m)	Add factodoric index if node was added to the queue earlier
-	vector<char> queue::get_a_star_moves(int* a,int t,int ic,int wt,int tc,int vm, vector<char> moves)	Get the moves accounting for the costs in A* strategy. i.e. costs incurred + number of wrong tiles in exisiting combi
-EightP.cpp : This is the main file for execution		1.	Switch statements for search, maxmoves and starting position.txt included
+#EightP.h/EightP_mtd.cpp#
+-To create the puzzle/combination object
 
+void puzzle::set_tot_cost(), Sum of incurred costs (each expansions results in +1 incurred cost) and the heuristic of number of wrong tiles
+
+void puzzle::set_factoradic()	More for BFS. Once we’re able to find the factodoric index, we could denote 1 in the array of length 362880 if the combi has been explored.
+
+void puzzle::moveleft(), movedown(), moveup(), moveright(). Moving the empty tile around while establishing rules on whether it’s legal for the move to be made.
+	
+#Queue.h/Queue.cpp#
+-To create the queue object for the search algorithm	
+void queue::add(int* a,int t,int ic,int wt,int tc,int vm, char m,vector<char> moves)	
+Queuing the combinations as puzzles. This is the process: Once I dequeue a node, I will queue the childs after the ‘last’ node before the expansion
+
+valid_addition(int* a,int t,int ic,int wt,int tc,int vm, char m), Test if it’s a valid addition. If valid, then I will add on to the queue. This accounts for whether it’s legal to move l,d,u or r. Also, if a node has already been added to the queue (known by factodoric index in array), I will not add on to the queue. 
+
+add_indicator(int* a,int t,int ic,int wt,int tc,int vm, char m)	Add factodoric index if node was added to the queue earlier
+
+vector<char> queue::get_a_star_moves(int* a,int t,int ic,int wt,int tc,int vm, vector<char> moves), Get the moves accounting for the costs in A* strategy. i.e. costs incurred + number of wrong tiles in exisiting combi
+
+#EightP.cpp#
+This is the main file for execution		
+1. Switch statements for search, maxmoves and starting position.txt included
+
+#Questions#
 Question 1: Is the claim correct? (are they solvable and do they require 31 moves?)
 As the time taken for Breadth first search is rather long, I will use my A* results to answer the question.
 Yes, the puzzles are solvable. But from my algorithm, both sets of puzzles require 46 moves (192 nodes expanded) to solve instead. It could be due to difference in heuristics used. In my case, I look at the number of wrong tiles while Kevin may have used Manhattan distance to do it instead. 
